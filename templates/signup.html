@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %} SIGN UP {% endblock %}
+
+{% block content %}
+<div class="container justify-content-center text-center">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form class="form-signin" action = "#" method = "post">
+        <img class="mb-4" src="{{url_for('static', filename='catsignup.png')}}" alt="" width="100" height="100">
+        <br>
+
+        <div class="form-label-group">
+            <input type="email" name="email" class="form-control" placeholder="Email" required="">
+            <label>Email</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="text" name="username" class="form-control" placeholder="Username" required="">
+            <label>Username</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="password" name="password" class="form-control" placeholder="Password" required="">
+            <label>Password</label>
+        </div>
+
+
+      <button class="btn btn btn-danger" type="submit">SIGN UP</button>
+
+    </form>
+    <br>
+</div>
+{% endblock %}

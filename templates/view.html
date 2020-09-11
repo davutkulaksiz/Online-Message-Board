@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %} Database {% endblock %}
+
+{% block content %}
+<div class="container justify-content-center text-center">
+    {% for item in values %}
+        <p>Name: {{item.name}}, Email: {{item.email}}, Post: {{item.post}}</p>
+    {% endfor %}
+</div>
+{% endblock %}

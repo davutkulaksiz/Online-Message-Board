@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Responsive meta tag-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{url_for('static', filename='smilingcatreddit.png')}}">
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <title>Caddit</title>
+
+
+
+    <style>
+
+        /* Make the image fully responsive */
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* Modify the background color */
+        .navbar-custom {
+            background-color: #000000;
+        }
+        /* Modify brand and text color */
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-text {
+            color: green;
+        }
+
+        .center_div{
+        margin: 0 auto;
+        width:50% /* value of your choice which suits your alignment */
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-center" align="center" >
+            <a class="navbar-brand">
+                <img src="{{url_for('static', filename='smilingcatreddit.png')}}" class="rounded-circle" alt="Logo" style="width:40px;">
+            </a>
+            <a class="navbar-brand text-danger" href="/" >CADDIT</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cats">Cats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/otheranimals">Other Animals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gaming">Gaming</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/politics">Politics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/nsfw">NSFW</a>
+                    </li>
+                </ul>
+                {% block content %}
+                    {% if "user" in session: %}
+                        <form class="form-inline mt-2 mt-md-0 justify-content-center text-center">
+                            <a class="btn btn-outline-danger mr-3"  href="/profile" role="button">PROFILE</a>
+                            <a class="btn btn-danger mr-3"  href="/logout" role="button">LOG OUT</a>
+                        </form>
+
+                    {% else: %}
+                        <form class="form-inline mt-2 mt-md-0 justify-content-center text-center">
+                            <a class="btn btn-outline-danger mr-3"  href="/login" role="button">LOG IN</a>
+                            <a class="btn btn btn-danger"  href="/signup" role="button">SIGN UP</a>
+                        </form>
+                    {% endif %}
+                {% endblock %}
+
+            </div>
+        </nav>
+    </header>
+
+    <br><br><br><br>
+
+    <main role="main">
+        <div class="container" align="center">
+          <h1 class="display-3">WELCOME TO CADDIT!</h1>
+          <p>Caddit is a brand new online message board where registered members can submit content to the site under different categories.</p>
+            <p>Even if you are not a registered member, you can still view the content our site offers.</p>
+            <img src="{{url_for('static', filename='croppednyancat.png')}}">
+        </div>
+
+        <div class="justify-content-center text-center">
+            <h2>RECENT POSTS</h2>
+        </div>
+
+        {% block post %}
+        {% for item in values %}
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <div class="media text pt-3">
+                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                    <text class="d-block text-secondary">/{{item.category}}</text>
+                    <strong class="d-block text-danger">@{{item.poster.name}}</strong>
+                {{item.post}}
+                </p>
+            </div>
+            {% if item.comment %}
+            {% for thing in item.comment %}
+                <div class="media text-muted pt-3">
+                    <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                        <strong class="d-block text">comment</strong><strong class="d-block text-info">@{{thing.commenter}}</strong>
+                        {{thing.comment}}
+                    </p>
+                </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endblock %}
+
+    </main>
+
+         <footer class="container py-5 justify-content-center text-center">
+          <div class="row">
+            <div class="col-12 col-md">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="24"><path fill-rule="evenodd" d="M20.322.75a10.75 10.75 0 00-7.373 2.926l-1.304 1.23A23.743 23.743 0 0010.103 6.5H5.066a1.75 1.75 0 00-1.5.85l-2.71 4.514a.75.75 0 00.49 1.12l4.571.963c.039.049.082.096.129.14L8.04 15.96l1.872 1.994c.044.047.091.09.14.129l.963 4.572a.75.75 0 001.12.488l4.514-2.709a1.75 1.75 0 00.85-1.5v-5.038a23.741 23.741 0 001.596-1.542l1.228-1.304a10.75 10.75 0 002.925-7.374V2.499A1.75 1.75 0 0021.498.75h-1.177zM16 15.112c-.333.248-.672.487-1.018.718l-3.393 2.262.678 3.223 3.612-2.167a.25.25 0 00.121-.214v-3.822zm-10.092-2.7L8.17 9.017c.23-.346.47-.685.717-1.017H5.066a.25.25 0 00-.214.121l-2.167 3.612 3.223.679zm8.07-7.644a9.25 9.25 0 016.344-2.518h1.177a.25.25 0 01.25.25v1.176a9.25 9.25 0 01-2.517 6.346l-1.228 1.303a22.248 22.248 0 01-3.854 3.257l-3.288 2.192-1.743-1.858a.764.764 0 00-.034-.034l-1.859-1.744 2.193-3.29a22.248 22.248 0 013.255-3.851l1.304-1.23zM17.5 8a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-11 13c.9-.9.9-2.6 0-3.5-.9-.9-2.6-.9-3.5 0-1.209 1.209-1.445 3.901-1.49 4.743a.232.232 0 00.247.247c.842-.045 3.534-.281 4.743-1.49z"></path></svg>
+              <small class="d-block mb-3 text-muted">© Davut Kulaksız</small>
+            </div>
+            <div class="col-6 col-md">
+              <h5>Website</h5>
+              <ul class="list-unstyled text-small">
+                <li><a class="text-muted" href="//davutkulaksiz.github.io" target="_blank">Github Pages</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-md">
+              <h5>Projects</h5>
+              <ul class="list-unstyled text-small">
+                  <li><a class="text-muted" href="//davutkulaksiz.github.io" target="_blank">Front-end Project</a></li>
+                  <li><a class="text-muted" href="https://github.com/davutkulaksiz/exchange-rate-of-try" target="_blank">First Flask Project</a></li>
+                  <li><a class="text-muted" href="https://github.com/davutkulaksiz/ENG-TR-Dictionary" target="_blank">Second Flask Project</a></li>
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+
+    <!-- Bootstrap JS Scripts-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+</html>
