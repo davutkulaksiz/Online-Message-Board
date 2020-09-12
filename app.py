@@ -90,10 +90,10 @@ def get_post():
     return jsonify({"post": output})
 
 # This will return the post by given id
-@app.route("/api/post/<id>", methods=["GET"])
-def get_post_by_id(id):
+@app.route("/api/post/<post_id>", methods=["GET"])
+def get_post_by_id(post_id):
     # To get the post by given id
-    post = Post.query.get(id)
+    post = Post.query.filter_by(_id=post_id).first_or_404(description="There is no data for <Post{}>".format(post_id))
     post_schema = PostSchema()
     output = post_schema.dump(post)
     return jsonify({"post": output})
@@ -133,9 +133,9 @@ def get_category_by_name(category):
 @app.route("/api/user/<user>", methods=["GET"])
 def get_user(user):
     # Get user's public data
-    user_info = User.query.filter_by(name=user).with_entities(User._id, User.name, User.facebook, User.twitter)
-
-    user_schema = UserSchema(many=True)
+    user_info = User.query.filter_by(name=user).with_entities(User._id, User.name, User.facebook, User.twitter)\
+        .first_or_404(description="There is no data for user {}".format(user))
+    user_schema = UserSchema()
     output = user_schema.dump(user_info)
     return jsonify({"user:": output})
 
