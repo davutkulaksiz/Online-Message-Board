@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -172,20 +171,23 @@ def login():
         if request.method == "POST":
             # User Data
             username = request.form["username"]
-            password = request.form["password"]
             # Checking if the user exists in the database
             found_user = User.query.filter_by(name=username).first()
-            # Checking if password matches with hashed one on database
-            found_password = found_user.password
-            password_check = sha256_crypt.verify(password, found_password)
-
-            if found_user and password_check:
-                # Session starts
-                session["user"] = username
-                # Redirection to Dynamic User Page
-                return redirect(url_for("profile", user=username))
+            if found_user:
+                password = request.form["password"]
+                # Checking if password matches with hashed one on database
+                found_password = found_user.password
+                password_check = sha256_crypt.verify(password, found_password)
+                if password_check:
+                    # Session starts
+                    session["user"] = username
+                    # Redirection to Dynamic User Page
+                    return redirect(url_for("profile", user=username))
+                else:
+                    flash("Incorrect username or password", "info")
+                    return render_template("login.html")
             else:
-                flash("Incorrect username/password", "info")
+                flash("Incorrect username or password", "info")
                 return render_template("login.html")
         else:
             return render_template("login.html")
