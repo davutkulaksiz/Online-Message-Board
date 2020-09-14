@@ -8,7 +8,7 @@
     {% for item in values %}
     <div class="media text pt-3">
         <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-            <strong class="d-block text-danger">@{{User.query.get(item.user_id).name}}</strong>
+            <a href="/profiles/{{User.query.get(item.user_id).name}}"><strong class="d-block text-danger">@{{User.query.get(item.user_id).name}}</strong></a>
        {{item.post}}
         </p>
     </div>
@@ -16,7 +16,8 @@
         {% for thing in item.comment %}
             <div class="media text-muted pt-3">
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text">comment</strong><strong class="d-block text-info">@{{thing.commenter}}</strong>
+                    <strong class="d-block text">comment</strong>
+                    <a href="/profiles/{{thing.commenter}}"><strong class="d-block text-info">@{{thing.commenter}}</strong></a>
                     {{thing.comment}}
                 </p>
             </div>

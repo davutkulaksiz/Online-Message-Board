@@ -128,7 +128,7 @@
             <div class="media text pt-3">
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                     <text class="d-block text-secondary">/{{item.category}}</text>
-                    <strong class="d-block text-danger">@{{item.poster.name}}</strong>
+                    <a href="/profiles/{{item.poster.name}}"><strong class="d-block text-danger">@{{item.poster.name}}</strong></a>
                 {{item.post}}
                 </p>
             </div>
@@ -136,7 +136,8 @@
             {% for thing in item.comment %}
                 <div class="media text-muted pt-3">
                     <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                        <strong class="d-block text">comment</strong><strong class="d-block text-info">@{{thing.commenter}}</strong>
+                        <strong class="d-block text">comment</strong>
+                        <a href="/profiles/{{thing.commenter}}"><strong class="d-block text-info">@{{thing.commenter}}</strong></a>
                         {{thing.comment}}
                     </p>
                 </div>
