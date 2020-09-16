@@ -273,8 +273,50 @@ def userProfiles(username):
         twitter = found_user.twitter
         return render_template("userProfiles.html", usr=username, twitter=twitter, facebook=facebook)
     else:
-        return redirect(url_for(index))
+        return redirect(url_for("index"))
 
+# Dynamic Category Page
+@app.route("/categories/<category>", methods=["GET", "POST"])
+def categoryPages(category):
+    # Checking if the category exists
+    accepted_strings = {"cats", "gaming", "politics", "otheranimals", "politics", "nsfw"}
+    if category in accepted_strings:
+        if request.method == "POST" and "post" in request.form:
+            # Post Data
+            body = request.form["post"]
+            if not body:
+                flash(u"Posts can not be empty", "error")
+            else:
+                username = session["user"]
+                Users = User.query.filter_by(name=username).first()
+
+                # Post object creation
+                post = Post(category, body, poster=Users, comment=[])
+
+                # Adding the post to database
+                db.session.add(post)
+                db.session.commit()
+        if request.method == "POST" and "comment" in request.form:
+            # Comment Data
+            text = request.form["comment"]
+            if not text:
+                print("Comments can not be empty")
+            else:
+                # Username of the commenter
+                commenter = session["user"]
+                # Post
+                Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
+                # Comment object creation
+                comment = Comment(text, mainpost=Posts, commenter=commenter)
+
+                # Adding the comment to database
+                db.session.add(comment)
+                db.session.commit()
+
+        return render_template("category.html", values=Post.query.filter_by(category=category),
+                               User=User, categoryName=category)
+    else:
+        return redirect(url_for("index"))
 
 # To see all the users in database
 @app.route("/view", methods=["GET", "POST"])
@@ -282,165 +324,6 @@ def view():
     return render_template("view.html", values=User.query.all())
 
 
-# Categories
-@app.route("/cats", methods=["GET", "POST"])
-def cats():
-    if request.method == "POST" and "post" in request.form:
-        # Post Data
-        category = "cats"
-        body = request.form["post"]
-        username = session["user"]
-        Users = User.query.filter_by(name=username).first()
-
-        # Post object creation
-        post = Post(category, body, poster=Users, comment=[])
-
-        # Adding the post to database
-        db.session.add(post)
-        db.session.commit()
-    if request.method == "POST" and "comment" in request.form:
-        # Comment Data
-        text = request.form["comment"]
-        # Username of the commenter
-        commenter = session["user"]
-        # Post
-        Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
-        # Comment object creation
-        comment = Comment(text, mainpost=Posts, commenter=commenter)
-
-        # Adding the comment to database
-        db.session.add(comment)
-        db.session.commit()
-
-    return render_template("cats.html", values=Post.query.filter_by(category="cats"), User=User)
-
-
-@app.route("/otheranimals", methods=["GET", "POST"])
-def otheranimals():
-    if request.method == "POST" and "post" in request.form:
-        # Post Data
-        category = "otheranimals"
-        body = request.form["post"]
-        username = session["user"]
-        Users = User.query.filter_by(name=username).first()
-
-        # Post object creation
-        post = Post(category, body, poster=Users, comment=[])
-
-        # Adding the post to database
-        db.session.add(post)
-        db.session.commit()
-    if request.method == "POST" and "comment" in request.form:
-        # Comment Data
-        text = request.form["comment"]
-        # Username of the commenter
-        commenter = session["user"]
-        # Post
-        Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
-        # Comment object creation
-        comment = Comment(text, mainpost=Posts, commenter=commenter)
-
-        # Adding the comment to database
-        db.session.add(comment)
-        db.session.commit()
-
-    return render_template("otheranimals.html", values=Post.query.filter_by(category="otheranimals"), User=User)
-
-
-@app.route("/gaming", methods=["GET", "POST"])
-def gaming():
-    if request.method == "POST" and "post" in request.form:
-        # Post Data
-        category = "gaming"
-        body = request.form["post"]
-        username = session["user"]
-        Users = User.query.filter_by(name=username).first()
-
-        # Post object creation
-        post = Post(category, body, poster=Users, comment=[])
-
-        # Adding the post to database
-        db.session.add(post)
-        db.session.commit()
-    if request.method == "POST" and "comment" in request.form:
-        # Comment Data
-        text = request.form["comment"]
-        # Username of the commenter
-        commenter = session["user"]
-        # Post
-        Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
-        # Comment object creation
-        comment = Comment(text, mainpost=Posts, commenter=commenter)
-
-        # Adding the comment to database
-        db.session.add(comment)
-        db.session.commit()
-
-    return render_template("gaming.html", values=Post.query.filter_by(category="gaming"), User=User)
-
-
-@app.route("/politics", methods=["GET", "POST"])
-def politics():
-    if request.method == "POST" and "post" in request.form:
-        # Post Data
-        category = "politics"
-        body = request.form["post"]
-        username = session["user"]
-        Users = User.query.filter_by(name=username).first()
-
-        # Post object creation
-        post = Post(category, body, poster=Users, comment=[])
-
-        # Adding the post to database
-        db.session.add(post)
-        db.session.commit()
-    if request.method == "POST" and "comment" in request.form:
-        # Comment Data
-        text = request.form["comment"]
-        # Username of the commenter
-        commenter = session["user"]
-        # Post
-        Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
-        # Comment object creation
-        comment = Comment(text, mainpost=Posts, commenter=commenter)
-
-        # Adding the comment to database
-        db.session.add(comment)
-        db.session.commit()
-
-    return render_template("politics.html", values=Post.query.filter_by(category="politics"), User=User)
-
-
-@app.route("/nsfw", methods=["GET", "POST"])
-def nsfw():
-    if request.method == "POST" and "post" in request.form:
-        # Post Data
-        category = "nsfw"
-        body = request.form["post"]
-        username = session["user"]
-        Users = User.query.filter_by(name=username).first()
-
-        # Post object creation
-        post = Post(category, body, poster=Users, comment=[])
-
-        # Adding the post to database
-        db.session.add(post)
-        db.session.commit()
-    if request.method == "POST" and "comment" in request.form:
-        # Comment Data
-        text = request.form["comment"]
-        # Username of the commenter
-        commenter = session["user"]
-        # Post
-        Posts = Post.query.filter_by(post=request.form["actualPost"]).first()
-        # Comment object creation
-        comment = Comment(text, mainpost=Posts, commenter=commenter)
-
-        # Adding the comment to database
-        db.session.add(comment)
-        db.session.commit()
-
-    return render_template("nsfw.html", values=Post.query.filter_by(category="nsfw"), User=User)
 
 
 if __name__ == "__main__":

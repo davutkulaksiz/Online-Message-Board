@@ -74,19 +74,19 @@
                         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cats">Cats</a>
+                        <a class="nav-link" href="/categories/cats">Cats</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/otheranimals">Other Animals</a>
+                        <a class="nav-link" href="/categories/otheranimals">Other Animals</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/gaming">Gaming</a>
+                        <a class="nav-link" href="/categories/gaming">Gaming</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/politics">Politics</a>
+                        <a class="nav-link" href="/categories/politics">Politics</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/nsfw">NSFW</a>
+                        <a class="nav-link" href="/categories/nsfw">NSFW</a>
                     </li>
                 </ul>
                 {% block content %}
@@ -127,7 +127,7 @@
         <div class="my-3 p-3 bg-white rounded shadow-sm">
             <div class="media text pt-3">
                 <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <text class="d-block text-secondary">/{{item.category}}</text>
+                    <a href="/categories/{{item.category}}"><text class="d-block text-secondary">{{item.category}}</text></a>
                     <a href="/profiles/{{item.poster.name}}"><strong class="d-block text-danger">@{{item.poster.name}}</strong></a>
                 {{item.post}}
                 </p>
